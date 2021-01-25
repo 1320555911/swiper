@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 
 # Create your models here.
@@ -24,8 +25,21 @@ class User(models.Model):
     birthday = models.DateField(default='2002-01-01', verbose_name='出生日')
     avatar = models.CharField(max_length=256, verbose_name='个人形象')
     location = models.CharField(max_length=10, choices=LOCATIONS, default='上海', verbose_name='常居地')
-
-
+    @property
+    def age(self):
+        '''用户年龄'''
+        today = datetime.date.today()
+        return (today-self.birthday).days // 365
+    def to_dict(self):
+        return {
+            'phonenum': self.phonenum,
+            'nickname': self.nickname,
+            'gender': self.gender,
+            'birthday': self.birthday.strftime("%Y/%m/%d"),
+            'avatar': self.avatar,
+            'location': self.location,
+            'age':self.age
+        }
 class Profile(models.Model):
     '''用户的交友资料'''
     dating_location = models.CharField(max_length=10, choices=User.LOCATIONS,
