@@ -14,3 +14,9 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'swiper.settings')
 celery_app = Celery('tasks')
 celery_app.config_from_object(config)
 celery_app.autodiscover_tasks(packages=settings.INSTALLED_APPS)
+
+def call_by_worker(func):
+    """在celery中对任务进行异步调用"""
+    task = celery_app.task(func)
+    return task.delay
+

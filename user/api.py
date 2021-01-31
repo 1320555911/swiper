@@ -2,7 +2,7 @@
 from common import errors, keys
 from lib.cache import rds
 from lib.http import render_json
-from lib.sms import SMS
+from lib.sms import send
 from user.models import User
 
 
@@ -11,9 +11,7 @@ def fetch_vcode(request):
     phonenum = request.GET.get('phonenum')
     if not phonenum:
         return render_json(None,errors.PARAM_ERR)
-    sms=SMS()
-    res = sms.send(phone_numbers=phonenum)
-    print(res)
+    res = send(phone_numbers=phonenum)
     if res:
         return render_json(None)
     else:
